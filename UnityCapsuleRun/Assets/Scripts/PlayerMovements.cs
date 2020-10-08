@@ -14,11 +14,14 @@ public class PlayerMovements : MonoBehaviour
     private bool deAccellerate = false;
 
     private Rigidbody rb;
-    // Start is called before the first frame update
+    private Vector3 startPos;
+
+
     void Start()
     {
         rb = GetComponent<Rigidbody>();
         rb.AddForce(new Vector3(0, 0, 200));
+        startPos = gameObject.transform.position;
     }
 
 
@@ -59,7 +62,8 @@ public class PlayerMovements : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        rb.AddForce(new Vector3(0, 0, forwardForce) * Time.deltaTime);
+        var zDiff = (transform.position.z - startPos.z) / 5;
+        rb.AddForce(new Vector3(0, 0, forwardForce + zDiff) * Time.deltaTime);
 
         if (moveRight)
         {
