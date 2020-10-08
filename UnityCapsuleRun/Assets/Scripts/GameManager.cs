@@ -11,13 +11,20 @@ public class GameManager : MonoBehaviour
     public GameObject txtGameOver;
     public Transform player;
     public Transform plane;
+    public GameObject obstacle;
 
     private Vector3 startPos;
+    private Vector3 lastObstaclePos;
 
     void Start()
     {
         txtGameOver.SetActive(false);
-        startPos = player.position;  
+        startPos = player.position;
+
+        for (int lc=0; lc<10; lc++)
+        {
+            var o = SpawnObstacle(10 * lc + 10 + startPos.z);
+        }
     }
 
     // Update is called once per frame
@@ -37,5 +44,20 @@ public class GameManager : MonoBehaviour
     public void RestartGame()
     {
         SceneManager.LoadScene("Game");
+    }
+
+    private GameObject SpawnObstacle(float zPos)
+    {
+        var xChangeRange = (plane.localScale.x - obstacle.transform.localScale.x) / 2;
+        var xPos = Random.Range(-xChangeRange, xChangeRange);
+        var o = Instantiate(obstacle, new Vector3(xPos, 0.5f, zPos), Quaternion.identity);
+        lastObstaclePos = o.transform.position;
+
+        return o;
+    }
+
+    public void SpawnObstacle()
+    {
+        SpawnObstacle(lastObstaclePos.z + 10);
     }
 }
